@@ -13,7 +13,7 @@
 html,body{margin:0;height:100%;overflow:hidden}
 body{font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#312e81 45%,#831843 100%);color:#0f172a;user-select:none}
 button,select{font-family:inherit}
-#ink{position:fixed;inset:0;z-index:70;pointer-events:none;touch-action:none}
+#ink{position:fixed;left:0;right:0;bottom:0;top:72px;width:100vw;height:calc(100vh - 72px);z-index:70;pointer-events:none;touch-action:none}
 .drawactive #ink{pointer-events:auto;cursor:crosshair}
 .hidden{display:none!important}
 .app{width:100vw;height:100dvh;position:relative;overflow:hidden}
@@ -25,7 +25,7 @@ button,select{font-family:inherit}
 .soundbtn,.miniBtn{border:none;background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.26);padding:10px 14px;border-radius:18px;font-weight:900;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 10px 24px rgba(0,0,0,.18);transition:.2s transform,.2s background}
 .soundbtn:hover,.miniBtn:hover{transform:translateY(-2px)}
 .lab{padding:14px;display:flex!important;flex-direction:column}
-.labTop{position:relative;z-index:2;width:min(98%,1450px);margin:0 auto 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.labTop{position:relative;z-index:120;width:min(98%,1450px);margin:0 auto 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .labTop .brandpill{font-size:19px}
 .stage{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:9px 15px;font-weight:900;letter-spacing:.03em}
 .board{position:relative;z-index:2;width:min(98%,1450px);margin:0 auto;flex:1;min-height:0;background:#fff;border:6px solid #f8fafc;border-radius:38px;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}
@@ -68,12 +68,14 @@ button,select{font-family:inherit}
 .ctrl.gold{background:#facc15;color:#713f12}
 .progressShell{width:180px;height:13px;background:#dbeafe;border-radius:999px;overflow:hidden}
 .progressBar{height:100%;background:linear-gradient(90deg,#22d3ee,#2563eb);width:0%;transition:width .25s}
-.toolbar{position:fixed;right:18px;bottom:78px;z-index:90;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:min(700px,78vw);padding:8px;border-radius:18px;background:rgba(255,255,255,.94);border:2px solid #cbd5e1;box-shadow:0 12px 26px rgba(15,23,42,.22);backdrop-filter:blur(10px)}
-.toolbar .tbtn{border:none;border-radius:12px;padding:7px 10px;background:#fff;color:#334155;font-weight:900;cursor:pointer;border:2px solid #cbd5e1}
-.toolbar .tbtn.active{background:#2563eb;color:#fff;border-color:#1d4ed8}
-.palette{display:flex;align-items:center;gap:5px}
-.swatch{width:28px;height:28px;border-radius:50%;border:3px solid #fff;outline:1px solid #94a3b8;cursor:pointer}
-.swatch.sel{outline:3px solid #1e3a8a}
+.toolbar{position:relative;z-index:130;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;padding:6px 12px;border-radius:22px;background:linear-gradient(135deg,rgba(15,23,42,.88),rgba(49,46,129,.88));border:2px solid rgba(255,255,255,.28);box-shadow:0 12px 28px rgba(0,0,0,.32);backdrop-filter:blur(12px)}
+.toolbar .tbtn{border:none;border-radius:14px;padding:7px 11px;background:rgba(255,255,255,.14);color:#fff;font-size:13px;font-weight:900;cursor:pointer;border:1.5px solid rgba(255,255,255,.22);transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s,box-shadow .2s}
+.toolbar .tbtn:hover{transform:translateY(-2px) scale(1.04);background:rgba(255,255,255,.24)}
+.toolbar .tbtn.active{background:linear-gradient(135deg,#facc15,#f97316);color:#0f172a;border-color:#fde047;box-shadow:0 0 16px rgba(250,204,21,.55);transform:scale(1.05)}
+.palette{display:flex;align-items:center;gap:6px;padding:0 4px}
+.swatch{width:24px;height:24px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.swatch:hover{transform:scale(1.18)}
+.swatch.sel{transform:scale(1.22);outline:3px solid #fde047}
 
 @media (max-width:900px){
   .boardBody{grid-template-columns:1fr;overflow:auto}
@@ -81,8 +83,7 @@ button,select{font-family:inherit}
   .half.right{min-height:290px}
   .board{overflow:auto}
   .stepsArea{max-height:35vh}
-  .toolbar{right:8px;left:8px;max-width:none;justify-content:center;bottom:6px}
-  .controls{padding-bottom:72px}
+  .labTop{flex-wrap:wrap;justify-content:center}
   .graphBox{min-height:220px}
 }
 @media (max-width:640px){
@@ -90,6 +91,8 @@ button,select{font-family:inherit}
   .board{border-width:5px;border-radius:22px}
   .enunciado{font-size:18px}
   .panelTitle{font-size:18px}
+  .toolbar{gap:4px;padding:5px 8px}
+  .toolbar .tbtn{padding:6px 8px;font-size:12px}
 }
 </style>
 </head>
@@ -105,8 +108,29 @@ button,select{font-family:inherit}
   <section class="lab" id="labView">
     <div class="labTop">
       <span class="brandpill">🚀 TuProfe20 Lab · Aula 23</span>
-      <span class="stage">EJERCICIO 5 · PARÉNTESIS Y TÉRMINOS</span>
-      <button class="miniBtn" id="toggleMute">🔊 Sonido</button>
+
+      <!-- Barra de pizarra integrada en la zona superior para no tapar el contenido -->
+      <nav class="toolbar" aria-label="Pizarra activa">
+        <button class="tbtn active" data-tool="select">☝ Selector</button>
+        <button class="tbtn" data-tool="pen" title="Mantén Shift presionado para trazar una línea recta">✏ Lápiz · Shift</button>
+        <button class="tbtn" data-tool="marker">🖍 Resaltador</button>
+        <button class="tbtn" data-tool="line">📐 Línea</button>
+        <button class="tbtn" data-tool="erase">◻ Borrador</button>
+        <div class="palette">
+          <button class="swatch sel" data-color="#ef4444" style="background:#ef4444" title="Rojo"></button>
+          <button class="swatch" data-color="#2563eb" style="background:#2563eb" title="Azul"></button>
+          <button class="swatch" data-color="#16a34a" style="background:#16a34a" title="Verde"></button>
+          <button class="swatch" data-color="#facc15" style="background:#facc15" title="Amarillo"></button>
+          <button class="swatch" data-color="#9333ea" style="background:#9333ea" title="Morado"></button>
+        </div>
+        <button class="tbtn" id="undoInk" title="Deshacer trazo">↩</button>
+        <button class="tbtn" id="clearInk" title="Limpiar pizarra">🗑</button>
+      </nav>
+
+      <div class="group">
+        <span class="stage">EJERCICIO 5 · PARÉNTESIS Y TÉRMINOS</span>
+        <button class="miniBtn" id="toggleMute">🔊 Sonido</button>
+      </div>
     </div>
 
     <div class="board">
@@ -157,29 +181,11 @@ button,select{font-family:inherit}
   </section>
 </div>
 
-<!-- Barra flotante de herramientas de pizarra -->
-<nav class="toolbar" aria-label="Pizarra activa">
-  <button class="tbtn active" data-tool="select">☝ Selector</button>
-  <button class="tbtn" data-tool="pen" title="Mantén Shift presionado al comenzar a dibujar para trazar una línea recta">✏ Lápiz · Shift = recto</button>
-  <button class="tbtn" data-tool="marker">🖍 Resaltador</button>
-  <button class="tbtn" data-tool="line">📐 Línea</button>
-  <button class="tbtn" data-tool="erase">◻ Borrador</button>
-  <div class="palette">
-    <button class="swatch sel" data-color="#ef4444" style="background:#ef4444" title="Rojo"></button>
-    <button class="swatch" data-color="#2563eb" style="background:#2563eb" title="Azul"></button>
-    <button class="swatch" data-color="#16a34a" style="background:#16a34a" title="Verde"></button>
-    <button class="swatch" data-color="#facc15" style="background:#facc15" title="Amarillo"></button>
-    <button class="swatch" data-color="#9333ea" style="background:#9333ea" title="Morado"></button>
-  </div>
-  <button class="tbtn" id="undoInk">↩</button>
-  <button class="tbtn" id="clearInk">🗑</button>
-</nav>
-
 <script>
 const $ = id => document.getElementById(id);
 let revealed = 0;
 
-// Secuencia pedagógica paso a paso para: 3(2x - 1) - 5 <= 2(x + 7) + 4
+// Pasos pedagógicos para resolver 3(2x - 1) - 5 <= 2(x + 7) + 4
 const STEPS = [
   {
     why: 'Aplicamos la propiedad distributiva para eliminar los paréntesis en ambos miembros.',
@@ -187,28 +193,28 @@ const STEPS = [
     phase: 0
   },
   {
-    why: 'Reducimos los términos constantes semejantes en cada lado de la desigualdad.',
+    why: 'Reducimos los términos numéricos semejantes en cada lado de la desigualdad.',
     math: '6x - 8 \\le 2x + 18',
     phase: 0
   },
   {
-    why: 'Agrupamos los términos con x en el primer miembro y los números en el segundo.',
+    why: 'Agrupamos los términos con x a la izquierda y los números a la derecha.',
     math: '6x - 2x \\le 18 + 8 \\quad\\Rightarrow\\quad 4x \\le 26',
     phase: 0
   },
   {
-    why: 'Dividimos entre 4 (positivo, el sentido ≤ no cambia) y simplificamos la fracción.',
-    math: 'x \\le \\frac{26}{4} \\quad\\Rightarrow\\quad x \\le \\frac{13}{2} = 6{,}5',
+    why: 'Dividimos ambos miembros entre 4 (positivo, el signo ≤ se conserva) y simplificamos.',
+    math: 'x \\le \\frac{26}{4} \\quad\\Rightarrow\\quad x \\le \\frac{13}{2} \\;(6{,}5)',
     phase: 1
   },
   {
-    why: 'El extremo 13/2 (6,5) sí se incluye. Representamos todos los valores menores o iguales.',
-    math: '\\boxed{CS = \\left(-\\infty,\\, \\frac{13}{2}\\right]}',
+    why: 'Como el signo es ≤, el valor 13/2 sí se incluye. Representamos todos los valores menores o iguales.',
+    math: '\\boxed{CS = \\left(-\\infty,\\,\\frac{13}{2}\\right]}',
     phase: 2
   }
 ];
 
-// Renderizado seguro con KaTeX
+// Renderiza expresiones en LaTeX usando KaTeX con respaldo de texto plano
 function math(tex, el, display = false) {
   if (window.katex) {
     try {
@@ -219,9 +225,11 @@ function math(tex, el, display = false) {
   el.textContent = tex;
 }
 
-// Partículas decorativas flotantes
+// Genera partículas decorativas flotantes en el fondo
 function createFloaters() {
   const f = $('floaters');
+  if (!f) return;
+  f.innerHTML = '';
   for (let i = 0; i < 16; i++) {
     const s = document.createElement('span');
     s.style.left = Math.random() * 100 + '%';
@@ -231,14 +239,12 @@ function createFloaters() {
   }
 }
 
-// Generación dinámica de la recta numérica en SVG para x <= 13/2 (6.5)
+// Construye dinámicamente la recta numérica SVG desde 0 hasta 10 con foco en 13/2 (6.5)
 function graph() {
-  const marks = [-2, 0, 2, 4, 6, 8, 10];
-  // Escala lineal centrada alrededor de 6.5 (13/2)
-  const x = v => 220 + (v + 2) * 62;
+  const marks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const x = v => 100 + v * 84;
   const y = 215;
-  const critVal = 6.5;
-  const zCrit = x(critVal);
+  const critX = x(6.5);
 
   let svg = `<svg viewBox="0 0 1050 420" role="img" aria-label="Recta numérica: solución desde menos infinito hasta 13/2 incluido">
     <defs>
@@ -247,47 +253,38 @@ function graph() {
         <stop offset="1" stop-color="#fde047"/>
       </linearGradient>
     </defs>
-    <text x="525" y="72" font-size="27" text-anchor="middle" font-weight="900" fill="#4338ca">${
-      revealed < 4
-        ? 'Identifiquemos el valor crítico'
-        : revealed === 4
-          ? 'Punto crítico: 13/2 (6,5)'
-          : 'CONJUNTO SOLUCIÓN'
-    }</text>
-    <!-- Eje principal de la recta real -->
+    <text x="525" y="74" font-size="27" text-anchor="middle" font-weight="900" fill="#4338ca">
+      ${revealed < 4 ? 'Identifiquemos el valor crítico' : revealed === 4 ? 'Punto crítico: 13/2 = 6,5' : 'CONJUNTO SOLUCIÓN'}
+    </text>
     <line x1="74" y1="${y}" x2="965" y2="${y}" stroke="#e11d48" stroke-width="9" stroke-linecap="round"/>
     <path d="M 64 ${y} L 89 ${y - 15} L 89 ${y + 15} Z M 985 ${y} L 960 ${y - 15} L 960 ${y + 15} Z" fill="#e11d48"/>`;
 
   for (const m of marks) {
     const z = x(m);
     svg += `<line x1="${z}" y1="${y - 16}" x2="${z}" y2="${y + 16}" stroke="#334155" stroke-width="3"/>
-            <text x="${z}" y="${y + 55}" text-anchor="middle" font-weight="900" font-size="25" fill="#334155">${m}</text>`;
+      <text x="${z}" y="${y + 54}" text-anchor="middle" font-weight="900" font-size="25" fill="#334155">${m}</text>`;
   }
 
-  svg += `<text x="48" y="${y + 55}" fill="#334155" font-size="22" font-weight="800">−∞</text>
-          <text x="945" y="${y + 55}" fill="#334155" font-size="22" font-weight="800">+∞</text>`;
+  svg += `<text x="48" y="${y + 54}" fill="#334155" font-size="22" font-weight="800">−∞</text>
+    <text x="945" y="${y + 54}" fill="#334155" font-size="22" font-weight="800">+∞</text>`;
 
-  // Fase 1 (paso 4): Ubicamos el punto crítico 13/2
-  // Fase 2 (paso 5): Resaltamos la región solución hacia -infinito
   if (revealed >= 4) {
-    svg += `<line x1="${zCrit}" x2="${zCrit}" y1="92" y2="322" stroke="#f97316" stroke-width="4" stroke-dasharray="10 8" class="guideReveal"/>`;
+    svg += `<line x1="${critX}" x2="${critX}" y1="94" y2="318" stroke="#f97316" stroke-width="4" stroke-dasharray="10 8" class="guideReveal"/>
+      <text x="${critX}" y="118" text-anchor="middle" fill="#6d28d9" font-size="24" font-weight="900">13/2 (6,5)</text>`;
 
     if (revealed === 4) {
-      svg += `<circle cx="${zCrit}" cy="${y}" r="14" fill="#ffffff" stroke="#7c3aed" stroke-width="5" class="guideReveal"/>
-              <text x="${zCrit}" y="116" text-anchor="middle" fill="#7c3aed" font-size="25" font-weight="900">13/2 (6,5)</text>`;
+      svg += `<circle cx="${critX}" cy="${y}" r="14" fill="#ffffff" stroke="#7c3aed" stroke-width="5" class="guideReveal"/>`;
     } else {
-      // Franja amarilla desde 13/2 hacia la izquierda (-infinito)
-      svg += `<rect x="86" y="${y - 20}" width="${zCrit - 86}" height="40" rx="20" fill="url(#rayLeft)" stroke="#ca8a04" stroke-width="3" class="bandRevealLeft"/>
-              <path d="M 74 ${y} l 27 -19 v 38 Z" fill="#facc15" class="bandRevealLeft"/>
-              <circle cx="${zCrit}" cy="${y}" r="17" fill="#facc15" stroke="#854d0e" stroke-width="5" class="guideReveal"/>
-              <text x="${zCrit}" y="${y - 84}" text-anchor="middle" fill="#6d28d9" font-size="26" font-weight="900">13/2 = 6,5</text>
-              <text x="${(86 + zCrit) / 2}" y="${y - 46}" text-anchor="middle" fill="#92400e" font-size="29" font-weight="900">x ≤ 13/2</text>
-              <text x="${(86 + zCrit) / 2}" y="${y + 106}" text-anchor="middle" fill="#166534" font-size="24" font-weight="900">13/2 está incluido ✓</text>`;
+      svg += `<rect x="86" y="${y - 20}" width="${critX - 86}" height="40" rx="20" fill="url(#rayLeft)" stroke="#ca8a04" stroke-width="3" class="bandReveal"/>
+        <path d="M 76 ${y} l 27 -19 v 38 Z" fill="#facc15" class="bandReveal"/>
+        <circle cx="${critX}" cy="${y}" r="17" fill="#facc15" stroke="#854d0e" stroke-width="5" class="guideReveal"/>
+        <text x="${critX - 185}" y="${y - 52}" text-anchor="middle" fill="#92400e" font-size="29" font-weight="900">x ≤ 13/2</text>
+        <text x="${critX - 185}" y="${y + 104}" text-anchor="middle" fill="#166534" font-size="24" font-weight="900">13/2 está incluido ✓</text>`;
     }
   }
 
   svg += `<style>
-    .bandRevealLeft{transform-box:fill-box;transform-origin:right center;animation:growLeft .75s ease-out both}
+    .bandReveal{transform-box:fill-box;transform-origin:right center;animation:growLeft .75s ease-out both}
     @keyframes growLeft{from{opacity:.15;transform:scaleX(.05)}to{opacity:1;transform:scaleX(1)}}
     .guideReveal{animation:appear .4s ease-out}
     @keyframes appear{from{opacity:0}to{opacity:1}}
@@ -295,10 +292,9 @@ function graph() {
   return svg;
 }
 
-// Actualiza toda la vista según el paso actual
+// Actualiza la vista completa según el número de pasos revelados
 function render() {
   math('3(2x - 1) - 5 \\le 2(x + 7) + 4', $('enunciadoEq'), true);
-
   const area = $('stepsArea');
   area.innerHTML = '';
 
@@ -306,8 +302,8 @@ function render() {
     area.innerHTML = `<div class="emptyBox">
       <div>
         <strong>¿Cómo empezamos?</strong>
-        <p>Presiona <b>Siguiente paso</b> para desarrollar los paréntesis mediante la propiedad distributiva.</p>
-        <p>La solución se resaltará en amarillo al finalizar.</p>
+        <p>Presiona <b>Siguiente paso</b> para aplicar la propiedad distributiva en ambos lados.</p>
+        <p>Al finalizar verás la solución resaltada en amarillo hacia −∞.</p>
       </div>
     </div>`;
   } else {
@@ -322,7 +318,7 @@ function render() {
     if (revealed === 5) {
       const d = document.createElement('div');
       d.className = 'notice';
-      d.textContent = '✓ Solución: todos los números reales menores o iguales que 13/2 (6,5), incluido.';
+      d.textContent = '✓ Solución: todos los números reales desde −∞ hasta 13/2 (6,5) incluido.';
       area.appendChild(d);
     }
     area.scrollTop = area.scrollHeight;
@@ -335,19 +331,17 @@ function render() {
   $('nextStep').disabled = revealed === 5;
   $('prevStep').disabled = revealed === 0;
 
-  $('graphTitle').textContent =
-    revealed === 5
-      ? 'La franja amarilla representa el conjunto solución.'
-      : revealed === 4
-        ? 'Marcamos el valor crítico 13/2 (6,5); falta representar la región solución.'
-        : 'La recta numérica se completa conforme avanzas.';
+  $('graphTitle').textContent = revealed === 5
+    ? 'La franja amarilla representa el conjunto solución.'
+    : revealed === 4
+      ? 'Marcamos el punto crítico 13/2 (6,5); falta sombrear la región.'
+      : 'La recta numérica se completa conforme avanzas.';
 
-  $('graphTip').textContent =
-    revealed === 5
-      ? 'El punto lleno indica que 13/2 está incluido (≤). La franja amarilla se extiende hacia −∞.'
-      : revealed === 4
-        ? 'Como x ≤ 13/2, partiremos de 6,5 con punto lleno y avanzaremos hacia la izquierda.'
-        : 'Primero reduce términos y despeja x; al final aparecerá la franja amarilla del conjunto solución.';
+  $('graphTip').textContent = revealed === 5
+    ? 'El círculo relleno indica que 13/2 está incluido (≤). La franja amarilla se extiende hacia −∞.'
+    : revealed === 4
+      ? 'Como x ≤ 13/2, partiremos desde 6,5 con punto cerrado y avanzaremos hacia la izquierda.'
+      : 'Primero reduce términos semejantes y despeja x; al final aparecerá la región solución.';
 }
 
 $('nextStep').onclick = () => { revealed = Math.min(5, revealed + 1); render(); };
@@ -355,7 +349,7 @@ $('prevStep').onclick = () => { revealed = Math.max(0, revealed - 1); render(); 
 $('solveAll').onclick = () => { revealed = 5; render(); };
 $('restart').onclick = () => { revealed = 0; render(); };
 
-// Efectos de sonido breves generados con Web Audio API (sin URLs externas)
+// Sintetizador de efectos de sonido con Web Audio API
 let soundEnabled = true, audioContext = null;
 function playSound(kind = 'click') {
   if (!soundEnabled) return;
@@ -391,7 +385,6 @@ function toggleSound() {
   syncSound();
   if (soundEnabled) playSound('success');
 }
-
 $('toggleMute').onclick = toggleSound;
 
 document.addEventListener('click', ev => {
@@ -403,19 +396,35 @@ document.addEventListener('click', ev => {
   }
 }, true);
 
-// Lógica de pizarra interactiva sobre toda la pantalla
-const ink = $('ink'), ctx = ink.getContext('2d');
-let tool = 'select', color = '#ef4444', down = false, last = null, origin = null, snapshot = null, straightMode = false, undo = [];
+// Configuración de pizarra activa con lienzo principal y sub-lienzo para resaltador
+const ink = $('ink');
+const ctx = ink.getContext('2d', { willReadFrequently: true });
+const strokeLayer = document.createElement('canvas');
+const sCtx = strokeLayer.getContext('2d');
+let tool = 'select', color = '#ef4444', down = false, last = null, origin = null, snapshot = null, straightMode = false, undo = [], currentStroke = [], inkTopOffset = 72;
 
+// Ajusta el lienzo exactamente debajo de la barra superior para que los botones sean siempre clicables
 function resizeInk() {
+  const topBar = document.querySelector('.labTop');
+  const rect = topBar ? topBar.getBoundingClientRect() : null;
+  inkTopOffset = rect ? Math.ceil(rect.bottom + 4) : 72;
+  ink.style.top = inkTopOffset + 'px';
+  ink.style.height = `calc(100vh - ${inkTopOffset}px)`;
+
+  const w = window.innerWidth;
+  const h = Math.max(100, window.innerHeight - inkTopOffset);
   const old = document.createElement('canvas');
   old.width = ink.width;
   old.height = ink.height;
   if (old.width && old.height) old.getContext('2d').drawImage(ink, 0, 0);
-  ink.width = innerWidth * devicePixelRatio;
-  ink.height = innerHeight * devicePixelRatio;
-  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-  if (old.width && old.height) ctx.drawImage(old, 0, 0, old.width / devicePixelRatio, old.height / devicePixelRatio);
+
+  ink.width = w;
+  ink.height = h;
+  strokeLayer.width = w;
+  strokeLayer.height = h;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  sCtx.setTransform(1, 0, 0, 1, 0, 0);
+  if (old.width && old.height) ctx.drawImage(old, 0, 0, w, h);
 }
 addEventListener('resize', resizeInk);
 resizeInk();
@@ -439,80 +448,134 @@ document.querySelectorAll('[data-color]').forEach(b => b.onclick = () => {
 
 $('clearInk').onclick = () => {
   saveInk();
-  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  ctx.clearRect(0, 0, ink.width, ink.height);
 };
 
 $('undoInk').onclick = () => {
   if (undo.length) ctx.putImageData(undo.pop(), 0, 0);
 };
-
+// Coordenadas exactas del puntero relativas al lienzo debajo de la barra superior
 function point(ev) {
-  return { x: ev.clientX, y: ev.clientY };
+  const rect = ink.getBoundingClientRect();
+  return {
+    x: ev.clientX - rect.left,
+    y: ev.clientY - rect.top
+  };
 }
 
-function strokeSegment(from, to, style) {
+// Dibuja la ruta completa acumulada (ideal para resaltador fluorescente uniforme y líneas nítidas)
+function renderCurrentPath(points, style) {
+  if (!points.length) return;
+
+  if (style === 'marker') {
+    // Resaltador fluorescente real: punta plana biselada, color vivo translúcido sin manchas dobles
+    sCtx.clearRect(0, 0, strokeLayer.width, strokeLayer.height);
+    sCtx.lineCap = 'butt';
+    sCtx.lineJoin = 'round';
+    sCtx.lineWidth = 26;
+    sCtx.strokeStyle = color;
+    sCtx.beginPath();
+    if (points.length === 1) {
+      sCtx.moveTo(points[0].x - 10, points[0].y);
+      sCtx.lineTo(points[0].x + 10, points[0].y);
+    } else {
+      sCtx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        sCtx.lineTo(points[i].x, points[i].y);
+      }
+    }
+    sCtx.stroke();
+
+    if (snapshot) ctx.putImageData(snapshot, 0, 0);
+    ctx.save();
+    ctx.globalAlpha = 0.34;
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.drawImage(strokeLayer, 0, 0);
+    ctx.restore();
+    return;
+  }
+
+  ctx.save();
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.lineWidth = style === 'erase' ? 34 : style === 'marker' ? 20 : 4.8;
-  ctx.globalAlpha = style === 'marker' ? 0.3 : 1;
+  ctx.lineWidth = style === 'erase' ? 36 : 4.5;
+  ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = style === 'erase' ? 'destination-out' : 'source-over';
   ctx.strokeStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(from.x, from.y);
-  ctx.lineTo(to.x, to.y);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
-  ctx.globalCompositeOperation = 'source-over';
+
+  if (points.length === 1) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(points[0].x, points[0].y, style === 'erase' ? 18 : 2.3, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 ink.addEventListener('pointerdown', ev => {
   if (tool === 'select' || (ev.pointerType === 'mouse' && ev.button !== 0)) return;
+
   ev.preventDefault();
   saveInk();
   down = true;
   origin = last = point(ev);
+  currentStroke = [origin];
   straightMode = tool === 'line' || (tool === 'pen' && ev.shiftKey);
-  snapshot = (tool === 'line' || tool === 'pen') ? ctx.getImageData(0, 0, ink.width, ink.height) : null;
+  snapshot = ctx.getImageData(0, 0, ink.width, ink.height);
   ink.setPointerCapture(ev.pointerId);
   playSound('draw');
-  if (tool === 'pen' && !straightMode) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(origin.x, origin.y, 2.5, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  renderCurrentPath(currentStroke, tool);
 });
 
 ink.addEventListener('pointermove', ev => {
   if (!down) return;
   ev.preventDefault();
   const p = point(ev);
+
   if (tool === 'pen' && ev.shiftKey) straightMode = true;
-  if (straightMode && snapshot) {
+
+  if (straightMode) {
     ctx.putImageData(snapshot, 0, 0);
-    strokeSegment(origin, p, tool);
+    renderCurrentPath([origin, p], tool);
+  } else if (tool === 'marker') {
+    currentStroke.push(p);
+    renderCurrentPath(currentStroke, 'marker');
   } else {
-    strokeSegment(last, p, tool);
+    renderCurrentPath([last, p], tool);
     last = p;
   }
 });
 
 function stopInk(ev) {
   if (!down) return;
+  const p = point(ev);
+
   if (straightMode && snapshot) {
     ctx.putImageData(snapshot, 0, 0);
-    strokeSegment(origin, point(ev), tool);
+    renderCurrentPath([origin, p], tool);
   }
   down = false;
   straightMode = false;
   snapshot = null;
-  if (ink.hasPointerCapture(ev.pointerId)) ink.releasePointerCapture(ev.pointerId);
+  currentStroke = [];
+  if (ev.pointerId !== undefined && ink.hasPointerCapture(ev.pointerId)) {
+    ink.releasePointerCapture(ev.pointerId);
+  }
 }
 
 ink.addEventListener('pointerup', stopInk);
 ink.addEventListener('pointercancel', stopInk);
+window.addEventListener('blur', () => { down = false; straightMode = false; });
 
-addEventListener('keydown', ev => {
+// Atajos de teclado para navegar pasos y herramientas
+document.addEventListener('keydown', ev => {
   if (ev.key === 'Escape') setTool('select');
   if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'z') {
     ev.preventDefault();
@@ -522,15 +585,20 @@ addEventListener('keydown', ev => {
   if (tool === 'select' && ev.key === 'ArrowLeft') $('prevStep').click();
 });
 
+// Inicialización de la aplicación
 function init() {
   createFloaters();
+  resizeInk();
   setTool('select');
   syncSound();
   render();
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-else init();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
